@@ -1,53 +1,1315 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=DM+Serif+Display:ital@0;1&family=Dancing+Script:wght@400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="valentine-confession.css">
-        <title>Valentine Confession</title>
-    </head>
-    <body>
-        <p class="instruction">Dear sweety,
-        <br>
-        This is for you...<br>
-        Click the heart!</p>
-        <div class="container">
-            <label>
-            <div class="heart">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/Love_Heart_SVG.svg"></img>
-            </div>
-            <input id="messageState" type="checkbox" style="display:none"/>
-            </label>
-            <div class="message">
-                <h1 style="font-family: Cinzel, serif; font-size: 30px; letter-spacing: 1.2px;">Dear Sweety,</h1>
-                <p> 
-                    <span>
-                        &emsp; I’ve been wanting to tell you this for a while, and I finally gathered the courage to write it down. You’ve become someone really special to me. The way you talk, the way you smile, and the way you make everything feel lighter—it all makes my day better without even trying.
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formula Master Challenge (Advanced)</title>
+    <!-- Tailwind CSS CDN load -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax for proper LaTeX rendering -->
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+            "HTML-CSS": { linebreaks: { automatic: true } },
+            SVG: { linebreaks: { automatic: true } }
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
 
-                    </span>
-                    <br> <br>
-                    <span>
-                        &emsp;  I like you, truly. And I care about you more than I expected to. I don’t know how you’ll feel after reading this, but I wanted to be honest with you. If you feel the same, I’d love to take the next step and see where this bond can go. I promise to always respect you, support you, and make you feel valued.</span>
-                        <br> <br>
+    <style>
+        /* Custom styles for Inter font and gaming aesthetics */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* Dark Blue Background for Game Feel */
+        }
+        .game-card {
+            background: #1e293b; /* Darker card background */
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.4), 0 5px 10px -5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+            border: 2px solid #334155;
+        }
+        .game-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+        }
+        .loading-ring {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+        }
+        .loading-ring:after {
+            content: " ";
+            display: block;
+            width: 24px;
+            height: 24px;
+            margin: 3px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            border-color: #3b82f6 transparent #3b82f6 transparent;
+            animation: loading-ring 1.2s linear infinite;
+        }
+        @keyframes loading-ring {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Custom scrollbar for better look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #475569;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background-color: #1e293b;
+        }
+        .flashcard-item {
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            backface-visibility: hidden;
+            transform-style: preserve-3d;
+        }
+        .flashcard-item.flipped {
+            transform: rotateY(180deg);
+        }
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border-radius: 0.75rem;
+            padding: 1rem;
+        }
+        .flashcard-back {
+            transform: rotateY(180deg);
+        }
 
-                   <span>
-                        &emsp;No matter what your answer is, I’m glad you’re a part of my life. I just didn’t want to keep this feeling inside anymore
-                    </span>      
-                </p>
-                <br>
-                <div class="sincere">
-                    <p style="font-weight: bold;"> With Love,</p>
-                Aakash</p>
-                 </div>
+        /* Full Screen Modal for JEE Advanced Question */
+        .jee-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85); /* Dark overlay */
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .jee-page {
+            width: 95%;
+            max-width: 1000px;
+            max-height: 95vh;
+            background-color: #ffffff; /* White page as requested */
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 0 50px rgba(255, 255, 255, 0.2);
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 min-h-screen flex items-center justify-center">
+
+    <div class="w-full max-w-4xl space-y-8">
+
+        <!-- Header -->
+        <header class="text-center">
+            <h1 class="text-4xl font-extrabold text-white mb-2 tracking-wide">🏆 Formula Master Challenge</h1>
+            <p class="text-xl text-gray-400">Subject chunein aur unlimited quiz shuru karein!</p>
+        </header>
+
+        <!-- Subject Selection Screen -->
+        <div id="subject-selection" class="game-card p-8 rounded-2xl text-center">
+            <h2 class="text-3xl font-bold text-yellow-400 mb-6">Mode Chunein</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Formula Recall Mode -->
+                <div class="p-6 rounded-xl bg-gray-700/50 border border-gray-600 space-y-4">
+                    <h3 class="text-2xl font-bold text-blue-400">Formula Recall (Single Subject)</h3>
+                    <p class="text-gray-300">Har subject ke formulas yaad karein. Ismein Flashcard aur Simple Problem tools uplabdh hain.</p>
+                    <div class="grid grid-cols-3 gap-3">
+                        <button onclick="startGame('Physics')" class="p-4 rounded-lg text-white font-bold bg-blue-600 hover:bg-blue-700 transition duration-300 transform hover:scale-105">
+                            ⚛️ Physics
+                        </button>
+                        <button onclick="startGame('Chemistry')" class="p-4 rounded-lg text-white font-bold bg-teal-600 hover:bg-teal-700 transition duration-300 transform hover:scale-105">
+                            🧪  Chemistry
+                        </button>
+                        <button onclick="startGame('Maths')" class="p-4 rounded-lg text-white font-bold bg-purple-600 hover:bg-purple-700 transition duration-300 transform hover:scale-105">
+                            📐 Maths
+                        </button>
+                    </div>
+                </div>
+
+                <!-- NEW JEE Mixed Mode -->
+                <div class="p-6 rounded-xl bg-gray-700/50 border border-red-600 space-y-4">
+                    <h3 class="text-2xl font-bold text-red-400">🔥 JEE Advanced Mixed Challenge</h3>
+                    <p class="text-gray-300">Physics, Chemistry, Maths ke mushkil, mixed numerical sawal. Questions English mein honge.</p>
+                    <button onclick="startMixedJEEChallenge()" class="w-full p-4 rounded-lg text-white font-extrabold text-xl bg-red-600 hover:bg-red-700 transition duration-300 transform hover:scale-105 shadow-xl">
+                        Start Mixed Challenge
+                    </button>
+                </div>
             </div>
         </div>
-        
-        <script src="jquery.js"></script>
-        <script src="jquery2.1.js"></script>
-        <script defer src="valentine-confession.js"></script>
-    </body>
-</html>
 
+        <!-- Main Quiz Card (Used for Formula Recall only) -->
+        <div id="quiz-card" class="game-card p-6 md:p-10 rounded-2xl hidden">
+            
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-6 border-b border-gray-600 pb-4">
+                <div class="flex flex-col sm:flex-row space-x-0 sm:space-x-4">
+                    <p class="text-lg text-gray-400 mb-2 sm:mb-0">Subject: <span id="subject-display" class="font-bold text-yellow-400 text-xl"></span></p>
+                    <p id="question-count" class="text-xl text-gray-300">Question: 0</p>
+                </div>
+                <div class="flex space-x-4 mt-3 sm:mt-0">
+                    <p id="score-display" class="text-xl font-bold text-green-400">Score: 0</p>
+                </div>
+            </div>
+
+            <!-- Question Area -->
+            <div class="mb-8 p-4 bg-gray-700 rounded-xl border border-gray-600 shadow-inner min-h-[100px] flex flex-col justify-center">
+                <div class="flex justify-between items-center">
+                    <p id="question-label" class="text-lg text-gray-300 mb-2">Concept to Identify:</p>
+                    <button id="tts-question-button" onclick="speakQuestion()" disabled
+                        class="px-2 py-1 text-sm text-white font-semibold rounded-lg bg-red-600 hover:bg-red-700 transition duration-150 shadow-md disabled:opacity-50">
+                        🗣️ Suniye
+                    </button>
+                </div>
+                <div id="question-content" class="text-3xl font-extrabold text-white">Loading...</div>
+            </div>
+
+            <!-- Input and Buttons -->
+            <div class="space-y-4">
+                <label for="answer-input" id="answer-label" class="block text-sm font-medium text-gray-300">Enter Formula (e.g., F=ma):</label>
+                <input type="text" id="answer-input" placeholder="e.g.: p=mv" class="w-full p-4 border-2 border-blue-500 rounded-xl bg-gray-800 text-white focus:ring-blue-500 focus:border-blue-500 text-lg shadow-inner">
+
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button id="check-button" onclick="checkAnswer()" class="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-white font-bold rounded-xl bg-indigo-600 hover:bg-indigo-700 transition duration-150 disabled:opacity-50 shadow-lg transform hover:scale-[1.02]">
+                        ✅ Check Formula
+                    </button>
+                    <button id="skip-button" onclick="nextQuestion(true)" class="sm:w-1/3 flex items-center justify-center gap-2 px-4 py-3 text-gray-200 font-bold rounded-xl bg-gray-600 hover:bg-gray-700 transition duration-150 disabled:opacity-50 shadow-lg transform hover:scale-[1.02]">
+                        ⏭️ Skip
+                    </button>
+                </div>
+
+                <!-- Message Box -->
+                <div id="message-box" class="p-4 text-center rounded-xl font-bold hidden text-gray-900" role="alert"></div>
+            </div>
+        </div>
+
+        <!-- Explanation Card (LLM Output - Used for both modes) -->
+        <div id="explanation-card" class="game-card p-6 md:p-8 rounded-2xl border-t-4 border-emerald-500 hidden">
+            <div class="flex justify-between items-center mb-4 border-b border-gray-600 pb-3">
+                <h3 id="explanation-title" class="text-2xl font-bold text-emerald-400">💡 Concept Review / Solution</h3>
+                
+                <!-- Timer and Pause Button -->
+                <div id="timer-controls" class="flex items-center space-x-3">
+                    <span id="study-timer-display" class="text-xl font-bold text-red-400 bg-gray-800 p-2 rounded-lg shadow-inner border border-red-500">20s</span>
+                    <button id="pause-button" onclick="togglePauseTimer()" class="px-3 py-2 text-sm text-white font-semibold rounded-lg bg-red-600 hover:bg-red-700 transition duration-150 shadow-md">
+                        ⏱️ Pause Timer
+                    </button>
+                </div>
+            </div>
+
+            <div id="explanation-content" class="text-gray-300 space-y-4 max-h-[40vh] overflow-y-auto">
+                <div class="flex justify-end mb-2">
+                    <button id="tts-explanation-button" onclick="speakExplanation()" disabled
+                        class="px-2 py-1 text-sm text-white font-semibold rounded-lg bg-red-600 hover:bg-red-700 transition duration-150 shadow-md disabled:opacity-50">
+                        🗣️ Explanation Suniye
+                    </button>
+                </div>
+                <div id="llm-explanation" class="prose max-w-none prose-invert">
+                    <!-- Explanation content will be inserted here, MathJax will render formulas -->
+                </div>
+                <div id="loading-indicator-explanation" class="text-center p-4 hidden">
+                    <div class="loading-ring mx-auto mb-2"></div>
+                    <p class="text-blue-400">Loading explanation...</p>
+                </div>
+                <div id="sources-display" class="text-sm text-gray-500 border-t border-gray-700 mt-4 pt-4">
+                    <!-- Sources will be displayed here -->
+                </div>
+            </div>
+            <button onclick="loadNextQuestionFromExplanation()" class="mt-4 w-full px-4 py-3 text-white font-bold rounded-xl bg-blue-600 hover:bg-blue-700 transition duration-150 shadow-lg transform hover:scale-[1.02]">
+                Next Question Load Karein
+            </button>
+        </div>
+
+        <!-- LLM Powered Tools Section (Used for Formula Recall only) -->
+        <div id="tools-section" class="space-y-6 hidden">
+            <h3 class="text-2xl font-bold text-white mt-8 mb-4 border-b-2 border-gray-600 pb-2">🛠️ Advanced Study Tools</h3>
+
+            <!-- Flashcard Generator -->
+            <div id="flashcard-card" class="game-card p-6 rounded-2xl border-l-4 border-fuchsia-500">
+                <h4 class="text-xl font-semibold text-fuchsia-400 mb-3">⚡ Concept Flashcards</h4>
+                <button id="generate-flashcard-button" onclick="generateFlashcards()" disabled class="w-full px-4 py-3 text-gray-900 font-bold rounded-xl bg-fuchsia-400 hover:bg-fuchsia-500 transition duration-150 disabled:opacity-50 shadow-md transform hover:scale-[1.02]">
+                    ✨ 3 Flashcards Generate Karein
+                </button>
+                <div id="flashcard-output" class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 hidden">
+                    <!-- Flashcards will be dynamically inserted here -->
+                </div>
+                <div id="loading-indicator-flashcard" class="text-center p-4 hidden">
+                    <div class="loading-ring mx-auto mb-2"></div>
+                    <p class="text-fuchsia-400">Generating flashcards...</p>
+                </div>
+            </div>
+            
+            <!-- Numerical Problem Generator -->
+            <div id="numerical-problem-card" class="game-card p-6 rounded-2xl border-l-4 border-yellow-500">
+                <h4 class="text-xl font-semibold text-yellow-400 mb-3">🔢 Formula ke Liye Example Problem</h4>
+                <button id="generate-numerical-button" onclick="generateNumericalProblem()" disabled class="w-full px-4 py-3 text-gray-900 font-bold rounded-xl bg-yellow-400 hover:bg-yellow-500 transition duration-150 disabled:opacity-50 shadow-md transform hover:scale-[1.02]">
+                    ✨ New Simple Numerical Problem
+                </button>
+                <div id="numerical-output" class="mt-4 p-4 bg-gray-700 rounded-xl border border-yellow-500 hidden">
+                    <div id="numerical-text" class="prose max-w-none prose-invert mb-3 text-gray-200"></div>
+                    <button id="show-solution-button" onclick="toggleSolution()" class="mt-2 px-4 py-2 text-white font-semibold rounded-lg bg-yellow-600 hover:bg-yellow-700 transition duration-150 shadow-md">
+                        Solution Dekhein
+                    </button>
+                    <div id="numerical-solution" class="mt-3 p-3 bg-gray-800 rounded-lg border border-yellow-600 hidden prose max-w-none text-gray-100"></div>
+                </div>
+                <div id="loading-indicator-numerical" class="text-center p-4 hidden">
+                    <div class="loading-ring mx-auto mb-2"></div>
+                    <p class="text-yellow-400">Generating problem...</p>
+                </div>
+            </div>
+
+            <!-- Doubt Solver -->
+            <div id="doubt-solver-card" class="game-card p-6 rounded-2xl border-l-4 border-pink-500">
+                <h4 class="text-xl font-semibold text-pink-400 mb-3">❓ Doubt Solver</h4>
+                <textarea id="doubt-input" placeholder="Apna sawaal yahan likhen (e.g., What is the difference between mass and weight?)" rows="2" class="w-full p-4 border-2 border-pink-500 rounded-xl bg-gray-800 text-white focus:ring-pink-500 focus:border-pink-500 shadow-inner"></textarea>
+                <button id="solve-doubt-button" onclick="solveDoubt()" disabled class="mt-3 w-full px-4 py-3 text-white font-bold rounded-xl bg-pink-600 hover:bg-pink-700 transition duration-150 disabled:opacity-50 shadow-md transform hover:scale-[1.02]">
+                    🧠 Doubt Solve Karein
+                </button>
+                <div id="doubt-output" class="mt-4 p-4 bg-gray-700 rounded-xl border border-pink-500 hidden prose max-w-none text-gray-200">
+                    <!-- Doubt answer will be inserted here -->
+                </div>
+                <div id="loading-indicator-doubt" class="text-center p-4 hidden">
+                    <div class="loading-ring mx-auto mb-2"></div>
+                    <p class="text-pink-400">Solving doubt...</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- NEW JEE Advanced Question Modal -->
+    <div id="jee-modal" class="jee-modal hidden">
+        <div class="jee-page flex flex-col">
+            <div id="jee-question-container" class="flex-1 text-gray-900 space-y-4">
+                <h2 class="text-3xl font-extrabold text-red-700 border-b-2 border-red-200 pb-2 mb-4">JEE Advanced Mixed Challenge</h2>
+                
+                <div id="jee-header" class="flex justify-between items-center mb-4 text-sm font-semibold text-gray-600">
+                    <p>Question: <span id="jee-question-count">0</span> | Subject: <span id="jee-subject-display"></span></p>
+                    <p>Score: <span id="jee-score-display" class="text-green-600">0</span></p>
+                </div>
+
+                <div id="jee-question-area" class="min-h-[200px] flex items-center justify-center text-center">
+                    <div id="jee-loading-indicator" class="text-center p-8">
+                        <div class="loading-ring mx-auto mb-4 scale-150"></div>
+                        <p class="text-red-500 font-bold text-lg">Generating...</p>
+                    </div>
+                    <div id="jee-question-content" class="text-lg text-gray-800 text-left hidden">
+                        <!-- JEE Question Text will be inserted here -->
+                    </div>
+                </div>
+
+                <div id="jee-answer-section" class="pt-6 border-t border-gray-200 hidden">
+                    <div class="flex justify-between items-center mb-2">
+                        <label for="jee-answer-input" class="block text-sm font-medium text-gray-700">Enter Final Numerical Answer (Only the value, e.g., 5.2):</label>
+                        <button id="jee-tts-button" onclick="speakQuestion()" disabled
+                            class="px-2 py-1 text-sm text-white font-semibold rounded-lg bg-red-600 hover:bg-red-700 transition duration-150 shadow-md disabled:opacity-50">
+                            🗣️ Read Question
+                        </button>
+                    </div>
+                    
+                    <input type="text" id="jee-answer-input" placeholder="e.g.: 2.5" class="w-full p-3 border-2 border-red-500 rounded-lg bg-gray-50 text-gray-900 focus:ring-red-500 focus:border-red-500 text-xl shadow-inner">
+
+                    <div class="flex flex-col sm:flex-row gap-3 mt-4">
+                        <button id="jee-check-button" onclick="checkAnswer()" class="flex-1 px-4 py-3 text-white font-bold rounded-lg bg-red-600 hover:bg-red-700 transition duration-150 disabled:opacity-50 shadow-lg transform hover:scale-[1.02]">
+                            ✅ Check Answer
+                        </button>
+                        <button id="jee-skip-button" onclick="nextQuestion(true)" class="sm:w-1/3 px-4 py-3 text-gray-700 font-bold rounded-lg bg-gray-200 hover:bg-gray-300 transition duration-150 disabled:opacity-50 shadow-lg transform hover:scale-[1.02]">
+                            ⏭️ Skip
+                        </button>
+                    </div>
+
+                    <div id="jee-message-box" class="mt-4 p-3 text-center rounded-lg font-bold hidden text-gray-900" role="alert"></div>
+                </div>
+            </div>
+            
+            <button onclick="closeJEEModal()" class="mt-6 w-full px-4 py-3 text-white font-bold rounded-lg bg-gray-600 hover:bg-gray-700 transition duration-150 shadow-lg">
+                Exit Challenge
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // API Key is left blank. Canvas will provide it at runtime.
+        const apiKey = "AIzaSyBhWUG_EgRqcuFZ7beKKtftNIJNxqbHcmk";
+        const FLASH_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent";
+        const TTS_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent";
+
+
+        // Multi-Subject Quiz Data for Class 11 (Used for both Formula Recall and JEE Mixed Concept selection)
+        const quizData = [
+            // Physics Concepts
+            { concept: "Kinematic Equation (Position-Time)", formula: "s=ut+1/2at^2", englishFormula: "$s = ut + \\frac{1}{2}at^2$", subject: "Physics" },
+            { concept: "Momentum Conservation", formula: "p=mv", englishFormula: "$p = mv$", subject: "Physics" },
+            { concept: "Gravitational Force", formula: "F=Gm1m2/r^2", englishFormula: "$F = G \\frac{m_1 m_2}{r^2}$", subject: "Physics" },
+            { concept: "Work-Energy Theorem", formula: "W=Fdcos(theta)", englishFormula: "$W = Fd\\cos(\\theta)$", subject: "Physics" },
+            
+            // Chemistry Concepts
+            { concept: "Ideal Gas Equation", formula: "PV=nRT", englishFormula: "$PV = nRT$", subject: "Chemistry" },
+            { concept: "Molarity Calculation", formula: "M=n/V", englishFormula: "$M = \\frac{n}{V}$", subject: "Chemistry" },
+            { concept: "First Law of Thermodynamics", formula: "deltaU=q+w", englishFormula: "$\\Delta U = q + w$", subject: "Chemistry" },
+            { concept: "Chemical Equilibrium Constant", formula: "Kc=[C]^c[D]^d/[A]^a[B]^b", englishFormula: "$K_c = \\frac{[C]^c[D]^d}{[A]^a[B]^b}$", subject: "Chemistry" },
+
+            // Maths Concepts
+            { concept: "Quadratic Equation Roots", formula: "x=(-b+(sqrt(b^2-4ac)))/2a", englishFormula: "$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$", subject: "Maths" },
+            { concept: "Sum of n terms in GP", formula: "Sn=a(r^n-1)/(r-1)", englishFormula: "$S_n = \\frac{a(r^n-1)}{r-1}$", subject: "Maths" },
+            { concept: "Vector Dot Product", formula: "A.B=|A||B|cos(theta)", englishFormula: "$A \\cdot B = |A||B|\\cos(\\theta)$", subject: "Maths" },
+            { concept: "Limits (L'Hopital's Rule)", formula: "lim(f(x)/g(x))=lim(f'(x)/g'(x))", englishFormula: "$\\lim_{x \\to c} \\frac{f(x)}{g(x)} = \\lim_{x \\to c} \\frac{f'(x)}{g'(x)}$", subject: "Maths" },
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let selectedSubject = null;
+        let filteredQuizData = []; 
+        let isMixedJEEMode = false;
+        let isJEELoading = false;
+
+        // Unified State for the current question
+        let currentQuestionState = {
+            mode: 'formula', // 'formula' or 'mixed_jee'
+            concept: '', // Concept name
+            answer: '', // Normalized correct answer (formula string or numerical value string)
+            displayQuestion: '', // What the user sees
+            rationalePrompt: '', // Prompt for LLM after user answers
+            displayFormula: '', // Formula string for formula mode
+            questionSubject: '' // Subject for the mixed question
+        };
+
+        // Timer variables
+        let studyTimer;
+        let timeLeft = 20; 
+        let isPaused = false;
+        const INITIAL_STUDY_TIME = 20;
+
+        // UI Elements
+        const subjectSelectionDiv = document.getElementById('subject-selection');
+        const quizCard = document.getElementById('quiz-card');
+        const toolsSection = document.getElementById('tools-section');
+        const explanationCard = document.getElementById('explanation-card');
+        const llmExplanationDiv = document.getElementById('llm-explanation');
+        const loadingIndicatorExplanation = document.getElementById('loading-indicator-explanation');
+        const sourcesDisplay = document.getElementById('sources-display');
+        const explanationTitle = document.getElementById('explanation-title');
+        
+        // Timer UI Elements
+        const studyTimerDisplay = document.getElementById('study-timer-display');
+        const timerControls = document.getElementById('timer-controls');
+        
+        // LLM Tools UI Elements 
+        const flashcardCard = document.getElementById('flashcard-card');
+        const numericalProblemCard = document.getElementById('numerical-problem-card');
+        const doubtSolverCard = document.getElementById('doubt-solver-card');
+
+        // Main Formula Quiz UI Elements (if formula mode)
+        const questionContent = document.getElementById('question-content');
+        const subjectDisplay = document.getElementById('subject-display');
+        const answerInput = document.getElementById('answer-input');
+        const checkButton = document.getElementById('check-button');
+        const skipButton = document.getElementById('skip-button');
+        const scoreDisplay = document.getElementById('score-display');
+        const questionCountDisplay = document.getElementById('question-count');
+        const messageBox = document.getElementById('message-box');
+        const questionLabel = document.getElementById('question-label');
+        const answerLabel = document.getElementById('answer-label');
+        const ttsQuestionButton = document.getElementById('tts-question-button');
+        const ttsExplanationButton = document.getElementById('tts-explanation-button');
+
+        // NEW JEE Modal UI Elements
+        const jeeModal = document.getElementById('jee-modal');
+        const jeeQuestionContent = document.getElementById('jee-question-content');
+        const jeeLoadingIndicator = document.getElementById('jee-loading-indicator');
+        const jeeAnswerInput = document.getElementById('jee-answer-input');
+        const jeeCheckButton = document.getElementById('jee-check-button');
+        const jeeSkipButton = document.getElementById('jee-skip-button');
+        const jeeMessageBox = document.getElementById('jee-message-box');
+        const jeeQuestionCount = document.getElementById('jee-question-count');
+        const jeeSubjectDisplay = document.getElementById('jee-subject-display');
+        const jeeScoreDisplay = document.getElementById('jee-score-display');
+        const jeeTtsButton = document.getElementById('jee-tts-button');
+
+
+        // --- Utility Functions for TTS Audio ---
+
+        const base64ToArrayBuffer = (base64) => {
+            const binaryString = atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        };
+
+        const pcmToWav = (pcm16, sampleRate = 24000) => {
+            const numChannels = 1;
+            const sampleBits = 16;
+            const bytesPerSample = sampleBits / 8;
+            const numSamples = pcm16.length;
+            const wavLength = 44 + numSamples * bytesPerSample;
+            
+            const wavBuffer = new ArrayBuffer(wavLength);
+            const view = new DataView(wavBuffer);
+
+            // Nested function for utility
+            const writeString = (view, offset, string) => {
+                for (let i = 0; i < string.length; i++) {
+                    view.setUint8(offset + i, string.charCodeAt(i));
+                }
+            };
+
+            // RIFF chunk
+            writeString(view, 0, 'RIFF');
+            view.setUint32(4, wavLength - 8, true);
+            writeString(view, 8, 'WAVE');
+
+            // fmt chunk
+            writeString(view, 12, 'fmt ');
+            view.setUint32(16, 16, true); // Sub-chunk size
+            view.setUint16(20, 1, true);  // Audio format (1 for PCM)
+            view.setUint16(22, numChannels, true);
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, sampleRate * numChannels * bytesPerSample, true); // Byte rate
+            view.setUint16(32, numChannels * bytesPerSample, true); // Block align
+            view.setUint16(34, sampleBits, true);
+
+            // data chunk
+            writeString(view, 36, 'data');
+            view.setUint32(40, numSamples * bytesPerSample, true);
+
+            // Write PCM data
+            let offset = 44;
+            for (let i = 0; i < numSamples; i++, offset += 2) {
+                view.setInt16(offset, pcm16[i], true);
+            }
+
+            return new Blob([wavBuffer], { type: 'audio/wav' });
+        };
+
+        // --- Utility to re-render MathJax ---
+        const updateMathContent = (element) => {
+            if (typeof MathJax !== 'undefined' && MathJax.Hub) {
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, element]);
+            }
+        };
+
+        // --- Mode Initialization Functions ---
+
+        window.startGame = function(subject) {
+            // Formula Recall Mode (Single Subject)
+            isMixedJEEMode = false;
+            selectedSubject = subject;
+            filteredQuizData = quizData.filter(q => q.subject === subject);
+            
+            if (filteredQuizData.length === 0) {
+                showMessage(messageBox, 'bg-red-500 text-gray-900', `No quiz data found for ${subject}.`);
+                return;
+            }
+
+            filteredQuizData.sort(() => Math.random() - 0.5);
+
+            currentQuestionIndex = 0;
+            score = 0;
+            updateScore(scoreDisplay, questionCountDisplay, subjectDisplay);
+            
+            subjectSelectionDiv.classList.add('hidden');
+            quizCard.classList.remove('hidden');
+            toolsSection.classList.remove('hidden');
+            flashcardCard.classList.remove('hidden');
+            numericalProblemCard.classList.remove('hidden');
+            doubtSolverCard.classList.remove('hidden');
+
+            loadQuestion();
+        }
+
+        window.startMixedJEEChallenge = function() {
+            // JEE Advanced Mixed Challenge Mode
+            isMixedJEEMode = true;
+            selectedSubject = 'Mixed PCM';
+            // Use all quizData concepts for random selection
+            filteredQuizData = quizData.sort(() => Math.random() - 0.5); 
+
+            currentQuestionIndex = 0;
+            score = 0;
+            updateScore(jeeScoreDisplay, jeeQuestionCount, jeeSubjectDisplay);
+            
+            subjectSelectionDiv.classList.add('hidden');
+            quizCard.classList.add('hidden');
+            toolsSection.classList.add('hidden');
+            explanationCard.classList.add('hidden'); // Start fresh
+
+            openJEEModal();
+        }
+
+        window.openJEEModal = function() {
+            jeeModal.classList.remove('hidden');
+            loadQuestion();
+        }
+
+        window.closeJEEModal = function() {
+            stopStudyTimer();
+            jeeModal.classList.add('hidden');
+            // Go back to the main selection screen
+            subjectSelectionDiv.classList.remove('hidden');
+            currentQuestionIndex = 0;
+            score = 0;
+            isMixedJEEMode = false;
+        }
+
+
+        function getCurrentQuestionData() {
+            // This provides unlimited questions by looping through the filtered array
+            const questionIndex = currentQuestionIndex % filteredQuizData.length;
+            return filteredQuizData[questionIndex];
+        }
+
+        function loadQuestion() {
+            if (isJEELoading) return;
+
+            stopStudyTimer();
+            hideExplanation();
+
+            // Reset LLM tool results (only relevant for formula mode, but safe to clear)
+            const llmToolsToClear = [document.getElementById('flashcard-output'), document.getElementById('numerical-output'), document.getElementById('doubt-output')];
+            llmToolsToClear.forEach(el => { if (el) { el.classList.add('hidden'); el.innerHTML = ''; } });
+
+            if (isMixedJEEMode) {
+                // Setup UI for JEE Mixed Mode
+                updateScore(jeeScoreDisplay, jeeQuestionCount, jeeSubjectDisplay);
+                
+                // Reset JEE modal elements
+                jeeAnswerInput.value = '';
+                jeeMessageBox.classList.add('hidden');
+                jeeQuestionContent.classList.add('hidden');
+                jeeLoadingIndicator.classList.remove('hidden');
+                jeeAnswerInput.disabled = true;
+                jeeCheckButton.disabled = true;
+                jeeSkipButton.disabled = true;
+                jeeTtsButton.disabled = true;
+                document.getElementById('jee-answer-section').classList.add('hidden');
+
+                fetchJEEQuestion();
+            } else {
+                // Setup UI for Formula Recall Mode
+                quizCard.classList.remove('hidden');
+                updateScore(scoreDisplay, questionCountDisplay, subjectDisplay);
+
+                const currentQ = getCurrentQuestionData();
+                currentQuestionState = {
+                    mode: 'formula',
+                    concept: currentQ.concept,
+                    answer: normalizeAnswer(currentQ.formula),
+                    displayQuestion: currentQ.concept,
+                    rationalePrompt: `Explain the concept: ${currentQ.concept}. The formula is ${currentQ.englishFormula}.`,
+                    displayFormula: currentQ.englishFormula,
+                    questionSubject: currentQ.subject
+                };
+
+                // Update UI for formula question
+                questionLabel.textContent = 'Concept to Identify:';
+                questionContent.textContent = currentQuestionState.displayQuestion;
+                answerLabel.textContent = 'Enter Formula (e.g., F=ma):';
+                answerInput.placeholder = 'e.g.: p=mv';
+                checkButton.innerHTML = '✅ Check Formula';
+                
+                // Enable controls
+                answerInput.disabled = false;
+                checkButton.disabled = false;
+                skipButton.disabled = false;
+                document.getElementById('generate-numerical-button').disabled = false;
+                document.getElementById('generate-flashcard-button').disabled = false;
+                document.getElementById('solve-doubt-button').disabled = false;
+                ttsQuestionButton.disabled = false;
+                answerInput.focus();
+            }
+        }
+        
+        // This function handles the "Next Question Load Karein" button on the explanation card
+        window.loadNextQuestionFromExplanation = function() {
+            currentQuestionIndex++;
+            hideExplanation();
+            loadQuestion();
+        }
+
+        // --- New JEE Question Fetcher ---
+        async function fetchJEEQuestion() {
+            if (isJEELoading) return;
+            isJEELoading = true;
+            
+            const randomConcept = getCurrentQuestionData();
+
+            const systemPrompt = "You are an expert JEE Advanced exam paper setter. Generate one highly challenging numerical problem (4-5 lines max) related to the given subject and concept. The question MUST be entirely in English. All mathematical formulas MUST be enclosed in LaTeX delimiters ($...$ or $$...$$) for proper rendering. Immediately follow the question text with the exact phrase '===ANSWER===' and provide the final, exact numerical value (no units, e.g., 2.5, 5, 0.1) required to be entered by the user. Do not provide any intermediate steps, only the final value. Use Google Search grounding for content accuracy.";
+            const userQuery = `Generate a JEE Advanced Numerical Problem based on the concept of ${randomConcept.concept} (Subject: ${randomConcept.subject}).`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                tools: [{ "google_search": {} }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+            };
+
+            const errorDiv = jeeQuestionContent;
+            const result = await makeApiCall(payload, jeeLoadingIndicator, errorDiv, FLASH_API_URL);
+            isJEELoading = false;
+            
+            if (result) {
+                const fullText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (fullText) {
+                    const parts = fullText.split('===ANSWER===');
+                    if (parts.length === 2) {
+                        const questionText = parts[0].trim();
+                        const answerValue = normalizeAnswer(parts[1].trim());
+
+                        currentQuestionState = {
+                            mode: 'mixed_jee',
+                            concept: randomConcept.concept,
+                            answer: answerValue, // e.g., "5.2"
+                            displayQuestion: questionText,
+                            rationalePrompt: `Provide the detailed step-by-step solution for the following JEE Advanced Numerical Problem. The concept is ${randomConcept.concept} (${randomConcept.subject}) and the final answer is ${answerValue}. The original question text was: "${questionText}"`,
+                            displayFormula: answerValue,
+                            questionSubject: randomConcept.subject
+                        };
+
+                        // Update JEE Modal UI
+                        jeeSubjectDisplay.textContent = currentQuestionState.questionSubject;
+                        jeeQuestionContent.innerHTML = questionText.replace(/\n/g, '<br>');
+                        jeeQuestionContent.classList.remove('hidden');
+                        document.getElementById('jee-answer-section').classList.remove('hidden');
+                        
+                        updateMathContent(jeeQuestionContent);
+
+                        // Enable controls
+                        jeeAnswerInput.disabled = false;
+                        jeeCheckButton.disabled = false;
+                        jeeSkipButton.disabled = false;
+                        jeeTtsButton.disabled = false;
+                        jeeAnswerInput.focus();
+
+                        return;
+                    }
+                }
+            }
+            
+            // Fallback for API failure or malformed response
+            jeeQuestionContent.innerHTML = '<p class="text-red-500 font-bold">⚠️ Error: JEE problem could not be generated. Please try again.</p>';
+            jeeQuestionContent.classList.remove('hidden');
+            setTimeout(() => loadQuestion(), 2000); // Try again after 2 seconds
+        }
+
+        function normalizeAnswer(answer) {
+            const cleaned = answer.toLowerCase().replace(/[^a-z0-9\/\=\*\^\-\+\.\(\)]/g, '');
+            
+            const num = parseFloat(cleaned);
+            if (!isNaN(num)) {
+                // Normalize numerical answer to remove trailing zeros (e.g., 2.0 -> 2, 2.100 -> 2.1)
+                return num.toFixed(3).replace(/\.?0*$/, ''); 
+            }
+
+            return cleaned;
+        }
+
+        window.checkAnswer = function() {
+            const userAnswer = normalizeAnswer(isMixedJEEMode ? jeeAnswerInput.value : answerInput.value);
+            const correctAnswer = currentQuestionState.answer;
+
+            const inputElement = isMixedJEEMode ? jeeAnswerInput : answerInput;
+            const messageBoxElement = isMixedJEEMode ? jeeMessageBox : messageBox;
+
+            if (userAnswer === correctAnswer) {
+                showMessage(messageBoxElement, 'bg-green-500 text-gray-900', '✅ Sahi Jawab! +1 point. Ab solution dekhein (20 seconds)...');
+                score++;
+                updateScore(isMixedJEEMode ? jeeScoreDisplay : scoreDisplay, isMixedJEEMode ? jeeQuestionCount : questionCountDisplay, isMixedJEEMode ? jeeSubjectDisplay : subjectDisplay);
+                disableInputAndButtons();
+
+                if(isMixedJEEMode) {
+                    // Temporarily hide JEE modal to show explanation card
+                    jeeModal.classList.add('hidden');
+                }
+                
+                fetchExplanation(currentQuestionState.rationalePrompt, currentQuestionState.mode); 
+            } else {
+                let message = '❌ Galat Numerical Answer. Dobara koshish karein ya Skip karke Solution dekhein.';
+                if (currentQuestionState.mode === 'formula') {
+                    // Only show formula in formula recall mode
+                    message = `❌ Galat. Sahi Formula hai: ${currentQuestionState.displayFormula}. Try again ya Skip karein.`;
+                }
+
+                showMessage(messageBoxElement, 'bg-red-500 text-gray-900', message);
+                updateMathContent(messageBoxElement);
+                inputElement.focus();
+            }
+        }
+
+        window.nextQuestion = function(skipped) {
+            if (skipped) {
+                const messageBoxElement = isMixedJEEMode ? jeeMessageBox : messageBox;
+                
+                if (currentQuestionState.mode === 'formula') {
+                    showMessage(messageBoxElement, 'bg-yellow-500 text-gray-900', `⏭️ Skip kiya. Sahi Formula hai: ${currentQuestionState.displayFormula}. Ab explanation dekhein (20 seconds)...`);
+                    updateMathContent(messageBoxElement);
+                } else {
+                    showMessage(messageBoxElement, 'bg-yellow-500 text-gray-900', `⏭️ Skip kiya. Ab detailed Solution dekhein (20 seconds)...`);
+                }
+
+                disableInputAndButtons();
+                
+                if(isMixedJEEMode) {
+                    // Temporarily hide JEE modal to show explanation card
+                    jeeModal.classList.add('hidden');
+                }
+
+                fetchExplanation(currentQuestionState.rationalePrompt, currentQuestionState.mode); 
+            } else {
+                // This runs when the timer automatically loads the next question
+                loadQuestion();
+            }
+        }
+
+        function updateScore(scoreEl, countEl, subjectEl) {
+            scoreEl.textContent = `${score}`;
+            countEl.textContent = isMixedJEEMode ? `${currentQuestionIndex + 1}` : `Question: ${currentQuestionIndex + 1}`;
+            subjectEl.textContent = selectedSubject;
+        }
+
+        function disableInputAndButtons() {
+            if (isMixedJEEMode) {
+                jeeAnswerInput.disabled = true;
+                jeeCheckButton.disabled = true;
+                jeeSkipButton.disabled = true;
+                jeeTtsButton.disabled = true;
+            } else {
+                answerInput.disabled = true;
+                checkButton.disabled = true;
+                skipButton.disabled = true;
+                document.getElementById('generate-numerical-button').disabled = true;
+                document.getElementById('generate-flashcard-button').disabled = true;
+                document.getElementById('solve-doubt-button').disabled = true;
+                ttsQuestionButton.disabled = true;
+            }
+        }
+
+        function showMessage(element, cssClass, text) {
+            element.className = `p-4 text-center rounded-xl font-bold ${cssClass} text-gray-900`;
+            element.textContent = text;
+            element.classList.remove('hidden');
+        }
+
+        function hideExplanation() {
+            explanationCard.classList.add('hidden');
+            llmExplanationDiv.innerHTML = '';
+            sourcesDisplay.innerHTML = '';
+            ttsExplanationButton.disabled = true;
+            // Ensure the main quiz card message box is also hidden if not in JEE mode
+            if (!isMixedJEEMode) {
+                messageBox.classList.add('hidden');
+            }
+        }
+
+        // --- Timer Functions ---
+
+        function startStudyTimer(duration) {
+            stopStudyTimer(); 
+            timeLeft = duration;
+            isPaused = false;
+            timerControls.classList.remove('hidden');
+            document.getElementById('pause-button').textContent = '⏱️ Pause Timer';
+            
+            function countdown() {
+                if (!isPaused) {
+                    studyTimerDisplay.textContent = `${timeLeft}s`;
+                    if (timeLeft <= 0) {
+                        stopStudyTimer();
+                        // Load next question automatically
+                        setTimeout(() => {
+                            currentQuestionIndex++;
+                            loadQuestion();
+                        }, 500);
+                        return;
+                    }
+                    timeLeft--;
+                }
+            }
+
+            studyTimer = setInterval(countdown, 1000);
+            countdown(); 
+        }
+
+        function stopStudyTimer() {
+            if (studyTimer) {
+                clearInterval(studyTimer);
+            }
+            timeLeft = INITIAL_STUDY_TIME;
+            studyTimerDisplay.textContent = `${timeLeft}s`;
+            timerControls.classList.add('hidden');
+            isPaused = false;
+        }
+        
+        window.togglePauseTimer = function() {
+            isPaused = !isPaused;
+            const button = document.getElementById('pause-button');
+            if (isPaused) {
+                button.textContent = '▶️ Resume Timer';
+                studyTimerDisplay.classList.add('bg-yellow-400', 'text-gray-900');
+                studyTimerDisplay.classList.remove('bg-red-400', 'text-gray-900');
+            } else {
+                button.textContent = '⏱️ Pause Timer';
+                studyTimerDisplay.classList.remove('bg-yellow-400', 'text-gray-900');
+                studyTimerDisplay.classList.add('bg-red-400', 'text-gray-900');
+            }
+        }
+
+        // --- Core Gemini API Call Function with Backoff ---
+        async function makeApiCall(payload, loadingIndicator, errorDiv, url, isStructured = false) {
+            const apiUrlWithKey = `${url}?key=${apiKey}`;
+            const maxRetries = 3;
+            let currentRetry = 0;
+
+            loadingIndicator.classList.remove('hidden');
+            
+            while (currentRetry < maxRetries) {
+                try {
+                    const response = await fetch(apiUrlWithKey, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    loadingIndicator.classList.add('hidden');
+                    return result; 
+
+                } catch (error) {
+                    currentRetry++;
+                    if (currentRetry < maxRetries) {
+                        const delay = Math.pow(2, currentRetry) * 1000; 
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                    } else {
+                        loadingIndicator.classList.add('hidden');
+                        errorDiv.innerHTML = '<p class="text-red-400">⚠️ Error: Request load nahi ho paya. Please dobara try karein.</p>';
+                        console.error("API call failed after all retries:", error);
+                        return null;
+                    }
+                }
+            }
+        }
+
+        function processGeminiResponse(result, isGrounding, targetElement) {
+            const candidate = result.candidates?.[0];
+
+            if (candidate && candidate.content?.parts?.[0]?.text) {
+                const text = candidate.content.parts[0].text;
+                targetElement.innerHTML = text.replace(/\n/g, '<br>');
+
+                if (isGrounding) {
+                    let sources = [];
+                    const groundingMetadata = candidate.groundingMetadata;
+
+                    if (groundingMetadata && groundingMetadata.groundingAttributions) {
+                        sources = groundingMetadata.groundingAttributions
+                            .map(attribution => ({
+                                uri: attribution.web?.uri,
+                                title: attribution.web?.title,
+                            }))
+                            .filter(source => source.uri && source.title);
+                    }
+
+                    if (sources.length > 0) {
+                        sourcesDisplay.innerHTML = `<p class="font-semibold text-gray-400 mb-1">🔗 Formula/Solution ke Sources:</p>`;
+                        sources.forEach((source, index) => {
+                            sourcesDisplay.innerHTML += `<p class="text-xs">
+                                ${index + 1}. <a href="${source.uri}" target="_blank" class="text-blue-400 hover:underline">${source.title}</a>
+                            </p>`;
+                        });
+                    } else {
+                        sourcesDisplay.innerHTML = '<p class="text-xs text-gray-600">Koi web sources nahi mile.</p>';
+                    }
+                } else {
+                    sourcesDisplay.innerHTML = ''; // Clear sources if not using grounding
+                }
+
+                updateMathContent(targetElement);
+                return text;
+
+            } else {
+                return null;
+            }
+        }
+
+        // --- Feature 1: Concept Explanation / Solution ---
+
+        async function fetchExplanation(prompt, questionMode) {
+            explanationCard.classList.remove('hidden');
+            llmExplanationDiv.innerHTML = '';
+            sourcesDisplay.innerHTML = '';
+            ttsExplanationButton.disabled = true; // Disable until content is loaded
+            const errorDiv = llmExplanationDiv; 
+
+            startStudyTimer(INITIAL_STUDY_TIME);
+            
+            if (questionMode === 'formula') {
+                explanationTitle.textContent = '💡 Concept Review';
+            } else {
+                explanationTitle.textContent = `🔥 JEE Detailed Solution (${currentQuestionState.questionSubject})`;
+            }
+
+
+            // System prompt changes based on the question type
+            const systemPrompt = questionMode === 'formula' 
+                ? `Act as a helpful and concise 11th grade ${currentQuestionState.questionSubject} tutor. Provide a very brief (single, short paragraph, 3-4 lines maximum) explanation of the concept and formula in clean, standard English text. All mathematical formulas MUST be enclosed in inline LaTeX delimiters ($...$) only. Do NOT use any special characters or formatting other than standard letters, numbers, punctuation, and LaTeX. Use Google Search for grounding.`
+                : `Act as an expert JEE tutor. Provide a detailed, step-by-step solution for the numerical problem requested in the user query. The solution must be entirely in English. The solution must be clear, follow logical steps, and lead to the final numerical answer. All mathematical formulas and steps MUST be enclosed in LaTeX delimiters ($...$ or $$...$$) for proper rendering. Use Google Search for grounding.`;
+
+
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                tools: [{ "google_search": {} }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+            };
+
+            const result = await makeApiCall(payload, loadingIndicatorExplanation, errorDiv, FLASH_API_URL);
+            if (result) {
+                processGeminiResponse(result, true, llmExplanationDiv);
+                ttsExplanationButton.disabled = false; // Enable TTS once content is loaded
+            }
+        }
+
+
+        // --- Feature 2: Simple Numerical Problem Generator (Formula Mode only) ---
+
+        window.generateNumericalProblem = async function() {
+            // Check if in formula recall mode
+            if (isMixedJEEMode || currentQuestionState.mode !== 'formula') {
+                const numericalText = document.getElementById('numerical-text');
+                numericalText.innerHTML = '<p class="text-red-400">Yeh tool sirf Formula Recall Mode mein kaam karta hai.</p>';
+                document.getElementById('numerical-output').classList.remove('hidden');
+                return;
+            }
+            const currentQ = getCurrentQuestionData();
+            
+            const generateNumericalButton = document.getElementById('generate-numerical-button');
+            const numericalOutput = document.getElementById('numerical-output');
+            const numericalText = document.getElementById('numerical-text');
+            const numericalSolution = document.getElementById('numerical-solution');
+            const loadingIndicatorNumerical = document.getElementById('loading-indicator-numerical');
+
+            generateNumericalButton.disabled = true;
+            numericalOutput.classList.add('hidden');
+            
+            const systemPrompt = "Act as an 11th-grade exam question setter. Generate one simple, solvable numerical problem (4-5 lines max) in clean, standard English text. All mathematical formulas MUST use LaTeX delimiters ($...$) for rendering. Immediately follow the question with the exact phrase '===SOLUTION===' and then provide the step-by-step solution. Do not use any special characters outside of standard letters, numbers, punctuation, and LaTeX.";
+            const userQuery = `Generate a numerical problem on the concept: ${currentQ.concept} (${currentQ.subject}) with formula ${currentQ.displayFormula}.`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+            };
+
+            const errorDiv = numericalText; 
+            const result = await makeApiCall(payload, loadingIndicatorNumerical, errorDiv, FLASH_API_URL);
+
+            generateNumericalButton.disabled = false;
+
+            if (result) {
+                const fullText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (fullText) {
+                    const parts = fullText.split('===SOLUTION===');
+                    if (parts.length === 2) {
+                        const question = parts[0].trim();
+                        const solution = parts[1].trim();
+
+                        numericalText.innerHTML = `
+                            <p class="font-bold text-gray-200 mb-2">Question:</p>
+                            ${question.replace(/\n/g, '<br>')}
+                        `;
+                        numericalSolution.innerHTML = `
+                            <p class="font-bold text-gray-100 mb-2">Solution:</p>
+                            ${solution.replace(/\n/g, '<br>')}
+                        `;
+
+                        numericalOutput.classList.remove('hidden');
+                        numericalSolution.classList.add('hidden'); 
+                        document.getElementById('show-solution-button').textContent = 'Solution Dekhein';
+
+                        updateMathContent(numericalText);
+                        updateMathContent(numericalSolution);
+                    } else {
+                         numericalText.innerHTML = '<p class="text-red-400">⚠️ Problem sahi format mein generate nahi ho paya. Dobara try karein.</p>';
+                    }
+                } else {
+                    numericalText.innerHTML = '<p class="text-red-400">⚠️ Problem generate nahi ho paya.</p>';
+                }
+            }
+        }
+
+        window.toggleSolution = function() {
+            const button = document.getElementById('show-solution-button');
+            const numericalSolution = document.getElementById('numerical-solution');
+            if (numericalSolution.classList.contains('hidden')) {
+                numericalSolution.classList.remove('hidden');
+                button.textContent = 'Solution Chhupayein';
+            } else {
+                numericalSolution.classList.add('hidden');
+                button.textContent = 'Solution Dekhein';
+            }
+        }
+
+        // --- Feature 3: Doubt Solver (Always available) ---
+
+        window.solveDoubt = async function() {
+            if (isMixedJEEMode) return; // Disabling for mixed mode as requested implicitly by making tools section visible only in formula mode.
+            
+            const doubtInput = document.getElementById('doubt-input');
+            const solveDoubtButton = document.getElementById('solve-doubt-button');
+            const doubtOutput = document.getElementById('doubt-output');
+            const loadingIndicatorDoubt = document.getElementById('loading-indicator-doubt');
+
+            const doubt = doubtInput.value.trim();
+            if (!doubt) {
+                doubtOutput.innerHTML = '<p class="text-red-400">Kripya apna sawaal likhen.</p>';
+                doubtOutput.classList.remove('hidden');
+                return;
+            }
+
+            solveDoubtButton.disabled = true;
+            doubtOutput.classList.add('hidden');
+
+            const systemPrompt = `Act as a patient and encouraging 11th grade ${selectedSubject} tutor. Answer the student's specific doubt concisely (3-4 lines max) and clearly in clean, standard English text. All mathematical formulas MUST be enclosed in inline LaTeX delimiters ($...$) only. Do NOT use any special characters or formatting other than standard letters, numbers, punctuation, and LaTeX. Use Google Search for grounding.`;
+            const userQuery = `Student is learning about ${currentQuestionState.concept}. Their doubt is: ${doubt}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                tools: [{ "google_search": {} }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+            };
+            
+            const errorDiv = doubtOutput;
+            const result = await makeApiCall(payload, loadingIndicatorDoubt, errorDiv, FLASH_API_URL);
+            solveDoubtButton.disabled = false;
+            doubtInput.value = ''; // Clear input
+
+            if (result) {
+                const answerText = processGeminiResponse(result, false, doubtOutput); // Use doubtOutput as target for MathJax
+                if (answerText) {
+                    doubtOutput.innerHTML = `<p class="font-bold text-pink-400 mb-1">Tutor's Answer:</p><p>${answerText}</p>`;
+                    doubtOutput.classList.remove('hidden');
+                    updateMathContent(doubtOutput);
+                } else {
+                    doubtOutput.innerHTML = '<p class="text-red-400">⚠️ Sorry, doubt solve nahi ho paya. Try again.</p>';
+                    doubtOutput.classList.remove('hidden');
+                }
+            }
+        }
+        
+        // --- Feature 4: Flashcard Generator (Formula Mode only) ---
+
+        window.generateFlashcards = async function() {
+            // Check if in formula recall mode
+            if (isMixedJEEMode || currentQuestionState.mode !== 'formula') return;
+            
+            const generateFlashcardButton = document.getElementById('generate-flashcard-button');
+            const flashcardOutput = document.getElementById('flashcard-output');
+            const loadingIndicatorFlashcard = document.getElementById('loading-indicator-flashcard');
+
+            generateFlashcardButton.disabled = true;
+            flashcardOutput.innerHTML = '';
+            flashcardOutput.classList.add('hidden');
+
+            const concept = currentQuestionState.concept;
+            const formula = currentQuestionState.displayFormula;
+
+            const systemPrompt = "You are an expert academic tool. Your task is to generate exactly 3 highly relevant and concise flashcards (Question/Answer format) for the given subject and concept. The language of the flashcards should be English. Ensure the answers are short. Use inline LaTeX delimiters ($...$) for any mathematical content or formulas.";
+            const userQuery = `Generate 3 flashcards for the concept: ${concept} in ${selectedSubject}, using the formula: ${formula}.`;
+
+            const flashcardSchema = {
+                type: "ARRAY",
+                description: "A list of exactly three flashcards related to the concept.",
+                items: {
+                    type: "OBJECT",
+                    properties: {
+                        question: { "type": "STRING", "description": "A concise question." },
+                        answer: { "type": "STRING", "description": "A concise answer, including LaTeX if needed." }
+                    },
+                    "propertyOrdering": ["question", "answer"]
+                }
+            };
+            
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: flashcardSchema
+                }
+            };
+
+            const errorDiv = flashcardOutput;
+            const result = await makeApiCall(payload, loadingIndicatorFlashcard, errorDiv, FLASH_API_URL, true);
+            generateFlashcardButton.disabled = false;
+
+            if (result && result.candidates && result.candidates.length > 0 && 
+                result.candidates[0].content && result.candidates[0].content.parts && 
+                result.candidates[0].content.parts.length > 0) {
+                
+                try {
+                    const jsonString = result.candidates[0].content.parts[0].text;
+                    const flashcards = JSON.parse(jsonString);
+
+                    flashcardOutput.innerHTML = '';
+                    flashcards.forEach((card, index) => {
+                        const cardElement = document.createElement('div');
+                        cardElement.classList.add('flashcard-item', 'relative', 'h-40');
+                        cardElement.onclick = () => cardElement.classList.toggle('flipped');
+                        
+                        cardElement.innerHTML = `
+                            <div class="flashcard-front bg-fuchsia-600 text-white shadow-xl">
+                                <p class="text-lg font-bold">Q${index + 1}: ${card.question}</p>
+                            </div>
+                            <div class="flashcard-back bg-fuchsia-200 text-gray-900 shadow-xl">
+                                <p class="text-md font-medium">A: ${card.answer}</p>
+                            </div>
+                        `;
+                        flashcardOutput.appendChild(cardElement);
+                        updateMathContent(cardElement); // Render MathJax in the flashcard
+
+                    });
+                    flashcardOutput.classList.remove('hidden');
+
+                } catch (e) {
+                    flashcardOutput.innerHTML = '<p class="text-red-400">⚠️ Flashcards ka data parse nahi ho paya.</p>';
+                    flashcardOutput.classList.remove('hidden');
+                    console.error("JSON parsing error:", e);
+                }
+
+            } else {
+                flashcardOutput.innerHTML = '<p class="text-red-400">⚠️ Flashcards generate nahi ho paye.</p>';
+                flashcardOutput.classList.remove('hidden');
+            }
+        }
+
+        // --- Feature 5: Text-to-Speech (TTS) ---
+
+        window.speakQuestion = function() {
+            let questionText;
+            let buttonElement;
+
+            if (isMixedJEEMode) {
+                questionText = currentQuestionState.displayQuestion.replace(/(\$|\\)/g, '');
+                buttonElement = jeeTtsButton;
+            } else {
+                questionText = currentQuestionState.displayQuestion.replace(/(\$|\\)/g, '');
+                buttonElement = ttsQuestionButton;
+            }
+
+            if (questionText) {
+                buttonElement.disabled = true;
+                buttonElement.textContent = '...Loading Audio';
+                generateTtsAudio(`Read the question: ${questionText}`, buttonElement);
+            }
+        }
+
+        window.speakExplanation = function() {
+            const explanationText = llmExplanationDiv.innerText.replace(/(\$|\\)/g, ''); // Remove LaTeX delimiters
+            if (explanationText) {
+                ttsExplanationButton.disabled = true;
+                ttsExplanationButton.textContent = '...Loading Audio';
+                generateTtsAudio(`Read the following explanation in an informative and calm voice: ${explanationText}`, ttsExplanationButton);
+            }
+        }
+
+        async function generateTtsAudio(textToSpeak, buttonElement) {
+            const voiceName = "Kore"; // A firm and clear voice
+            
+            const payload = {
+                contents: [{
+                    parts: [{ text: textToSpeak }]
+                }],
+                generationConfig: {
+                    responseModalities: ["AUDIO"],
+                    speechConfig: {
+                        voiceConfig: {
+                            prebuiltVoiceConfig: { voiceName: voiceName }
+                        }
+                    }
+                },
+                model: "gemini-2.5-flash-preview-tts"
+            };
+
+            const result = await makeApiCall(payload, {classList: { remove: () => {}, add: () => {} }}, buttonElement, TTS_API_URL);
+
+            const originalText = buttonElement.id === 'tts-question-button' ? '🗣️ Suniye' : (buttonElement.id === 'jee-tts-button' ? '🗣️ Read Question' : '🗣️ Explanation Suniye');
+            const originalDisabled = buttonElement.disabled;
+
+            if (result) {
+                const part = result?.candidates?.[0]?.content?.parts?.[0];
+                const audioData = part?.inlineData?.data;
+                const mimeType = part?.inlineData?.mimeType;
+
+                if (audioData && mimeType && mimeType.startsWith("audio/")) {
+                    const sampleRateMatch = mimeType.match(/rate=(\d+)/);
+                    const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 24000;
+                    
+                    try {
+                        const pcmData = base64ToArrayBuffer(audioData);
+                        const pcm16 = new Int16Array(pcmData);
+                        const wavBlob = pcmToWav(pcm16, sampleRate);
+                        const audioUrl = URL.createObjectURL(wavBlob);
+
+                        const audio = new Audio(audioUrl);
+                        audio.play();
+                        
+                        buttonElement.textContent = '🔊 Baj Raha Hai';
+
+                        audio.onended = () => {
+                            buttonElement.textContent = originalText;
+                            if (!originalDisabled) buttonElement.disabled = false;
+                            URL.revokeObjectURL(audioUrl);
+                        };
+                        audio.onerror = (e) => {
+                            console.error("Audio playback error:", e);
+                            buttonElement.textContent = '❌ Audio Error';
+                            if (!originalDisabled) buttonElement.disabled = false;
+                            URL.revokeObjectURL(audioUrl);
+                        };
+
+                    } catch (e) {
+                        console.error("Error processing audio data:", e);
+                        buttonElement.textContent = '❌ Audio Processing Error';
+                        if (!originalDisabled) buttonElement.disabled = false;
+                    }
+
+
+                } else {
+                    buttonElement.textContent = '❌ Audio Not Found';
+                    if (!originalDisabled) buttonElement.disabled = false;
+                }
+            } else {
+                buttonElement.textContent = '❌ TTS Failed';
+                if (!originalDisabled) buttonElement.disabled = false;
+            }
+
+            // Restore loading state after a brief moment if still showing '...Loading Audio'
+            if (buttonElement.textContent === '...Loading Audio') {
+                buttonElement.textContent = originalText;
+                if (!originalDisabled) buttonElement.disabled = false;
+            }
+        }
+        
+    </script>
+</body>
+</html>
